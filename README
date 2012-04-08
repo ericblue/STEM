@@ -6,14 +6,14 @@
 [Overview]
 
 I recently discovered that a number of Samsung TVs support messaging (Application -> Home Network Center).
-Samsung allows supported DLNA (uPnP) phones to send messages to the phone that include:
+Samsung allows supported DLNA (uPnP) phones to send messages to the TV that include:
 
    * SMS messages
    * Incoming call notifications
    * Schedule reminders
    
 Luckily some brilliant folks have figured out the SOAP-based protocol for allowing any application to send
-these messages directly to the TV.   
+these messages directly to the TV without the need of a supported phone.   
 
 The goal of this project is to share easily accessible working examples (simple shell scripts for now). 
 And, ultimately enable some interesting "Enhanced" messaging by integrating with other services.  
