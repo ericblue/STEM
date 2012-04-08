@@ -1,0 +1,38 @@
+# Author: Eric Blue
+# 	url   = http://eric-blue.com/
+#   email = ericblue76 (at) gmail (dot) com
+# Project: STEM - Samsung TV Enhanced Messaging
+
+[Overview]
+
+I recently discovered that a number of Samsung TVs support messaging (Application -> Home Network Center).
+Samsung allows supported DLNA (uPnP) phones to send messages to the phone that include:
+
+   * SMS messages
+   * Incoming call notifications
+   * Schedule reminders
+   
+Luckily some brilliant folks have figured out the SOAP-based protocol for allowing any application to send
+these messages directly to the TV.   
+
+The goal of this project is to share easily accessible working examples (simple shell scripts for now). 
+And, ultimately enable some interesting "Enhanced" messaging by integrating with other services.  
+Example:
+
+    * View incoming/missed calls in near real-time using Google Voice
+    * Notification if friends & family are stopping by using Google Latitude
+    * Integrate with SMS gateway services (e.g. Twilio) to receive messages direct from phones
+    
+[Requirements]
+
+    1) A Samsung TV (model >=2009?) that supports Home Network Center messages
+    2) IP-enabled TV (static or DHCP)
+
+Note that I've only tested this on my own Samsung LN46B750 TV.  I'm not sure exactly which models support
+this feature.
+    
+[Links]
+
+    * SamyGo Wiki - original protocol documentation - http://wiki.samygo.tv/index.php5/MessageBoxService_request_format
+    * Java App for sending messages - http://wiki.samygo.tv/index.php5/Desktop_applications_list#MessageBox_Service_C-series
+

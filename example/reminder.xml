@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" >
+	<s:Body>
+		<u:AddMessage xmlns:u="urn:samsung.com:service:MessageBoxService:1">
+			<MessageID>1</MessageID>
+			<MessageType>text/xml</MessageType>
+				<Message>
+					&lt;Category&gt;Schedule Reminder&lt;/Category&gt;
+          			&lt;DisplayType&gt;Maximum&lt;/DisplayType&gt;
+					 &lt;StartTime&gt;
+					   &lt;Date&gt;2012-04-07&lt;/Date&gt;		
+					   &lt;Time&gt;17:40:00&lt;/Time&gt;		
+					 &lt;/StartTime&gt;
+					 &lt;Owner&gt;
+					   &lt;Number&gt;310-555-1212&lt;/Number&gt;
+					   &lt;Name&gt;Owner Name&lt;/Name&gt;
+					 &lt;/Owner&gt;
+					 &lt;Subject&gt;Schedule Reminder Subject&lt;/Subject&gt;
+					 &lt;EndTime&gt;
+					   &lt;Date&gt;2012-04-07&lt;/Date&gt;		
+					   &lt;Time&gt;17:45:00&lt;/Time&gt;		
+					 &lt;/EndTime&gt;
+					 &lt;Location&gt;Location Name&lt;/Location&gt;
+					 &lt;Body&gt;message&lt;/Body&gt;
+				</Message>
+		</u:AddMessage>
+	</s:Body>
+</s:Envelope>

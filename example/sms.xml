@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" >
+	<s:Body>
+		<u:AddMessage xmlns:u="urn:samsung.com:service:MessageBoxService:1">
+			<MessageID>1</MessageID>
+			<MessageType>text/xml</MessageType>
+				<Message>
+				&lt;Category&gt;SMS&lt;/Category&gt;
+				&lt;DisplayType&gt;Maximum&lt;/DisplayType&gt;
+				&lt;ReceiveTime&gt;
+				&lt;Date&gt;2012-04-07&lt;/Date&gt;
+				&lt;Time&gt;10:53:56&lt;/Time&gt;
+				&lt;/ReceiveTime&gt;
+				&lt;Receiver&gt;
+				&lt;Number&gt;310-555-1212&lt;/Number&gt;
+				&lt;Name&gt;Joe Smith&lt;/Name&gt;
+				&lt;/Receiver&gt;
+				&lt;Sender&gt;
+				&lt;Number&gt;310-555-2323&lt;/Number&gt;
+				&lt;Name&gt;Sender Name&lt;/Name&gt;
+				&lt;/Sender&gt;
+				&lt;Body&gt;message&lt;/Body&gt;
+				</Message>
+		</u:AddMessage>
+	</s:Body>
+</s:Envelope>

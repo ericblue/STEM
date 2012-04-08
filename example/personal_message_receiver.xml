@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:samsung.com:device:PersonalMessageReceiver:1</deviceType>
+    <friendlyName>TV</friendlyName>
+    <manufacturer>Samsung Electronics</manufacturer>
+    <manufacturerURL>http://www.samsung.com</manufacturerURL>
+    <modelDescription>Samsung DTV PMR</modelDescription>
+    <modelName>Samsung DTV PMR</modelName>
+    <modelNumber>1.0</modelNumber>
+    <modelURL>http://www.samsung.com</modelURL>
+    <serialNumber>20081224PMR</serialNumber>
+    <UDN>uuid:d26e876b-7726-7b65-8ef5-1dc7d2b04f80</UDN>
+    <serviceList>
+      <service>
+        <serviceType>urn:samsung.com:service:MessageBoxService:1</serviceType>
+        <serviceId>urn:samsung.com:serviceId:MessageBoxService</serviceId>
+        <controlURL>/PMR/control/MessageBoxService</controlURL>
+        <eventSubURL>/PMR/event/MessageBoxService</eventSubURL>
+        <SCPDURL>MessageBoxService.xml</SCPDURL>
+      </service>
+    </serviceList>
+  </device>
+</root>

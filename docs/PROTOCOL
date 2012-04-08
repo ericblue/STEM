@@ -1,0 +1,215 @@
+Samsung TV MessageBoxService protocol (sample requests/responses)
+
+Source: Copied from SamyGoWiki (http://wiki.samygo.tv/index.php5/MessageBoxService_request_format)
+
+
+** MessageBoxService SOAP request **
+
+In general, TV supports processing SOAP requests. Basic interface description can be downloaded from TV:
+http://yourTV:52235/pmr/PersonalMessageReceiver.xml
+ <?xml version="1.0" ?> 
+ <root xmlns="urn:schemas-upnp-org:device-1-0">
+ <specVersion>
+   <major>1</major> 
+   <minor>0</minor> 
+ </specVersion>
+ <device>
+   <deviceType>urn:samsung.com:device:PersonalMessageReceiver:1</deviceType> 
+   <friendlyName>TV</friendlyName> 
+   <manufacturer>Samsung Electronics</manufacturer> 
+   <manufacturerURL>http://www.samsung.com</manufacturerURL> 
+   <modelDescription>Samsung DTV PMR</modelDescription> 
+   <modelName>Samsung DTV PMR</modelName> 
+   <modelNumber>1.0</modelNumber> 
+   <modelURL>http://www.samsung.com</modelURL> 
+   <serialNumber>...</serialNumber> 
+   <UDN>uuid:...</UDN> 
+ <serviceList>
+ <service>
+   <serviceType>urn:samsung.com:service:MessageBoxService:1</serviceType> 
+   <serviceId>urn:samsung.com:serviceId:MessageBoxService</serviceId> 
+   <controlURL>/PMR/control/MessageBoxService</controlURL> 
+   <eventSubURL>/PMR/event/MessageBoxService</eventSubURL> 
+   <SCPDURL>MessageBoxService.xml</SCPDURL> 
+ </service>
+ </serviceList>
+ </device>
+ </root>
+You can see, interface implements only one service MessageBoxService which description can be downloaded from:
+http://yourTV:52235/pmr/MessageBoxService.xml
+ <?xml version="1.0" encoding="utf-8" ?> 
+ <scpd xmlns="urn:schemas-upnp-org:service-1-0">
+ <specVersion>
+   <major>1</major> 
+   <minor>0</minor> 
+ </specVersion>
+ <actionList>
+ <action>
+   <name>AddMessage</name> 
+ <argumentList>
+ <argument>
+   <name>MessageID</name> 
+   <direction>in</direction> 
+   <relatedStateVariable>A_ARG_TYPE_MessageID</relatedStateVariable> 
+ </argument>
+ <argument>
+   <name>MessageType</name> 
+   <direction>in</direction> 
+   <relatedStateVariable>A_ARG_TYPE_MessageType</relatedStateVariable> 
+ </argument>
+ <argument>
+   <name>Message</name> 
+   <direction>in</direction> 
+   <relatedStateVariable>A_ARG_TYPE_Message</relatedStateVariable> 
+   </argument>
+   </argumentList>
+ </action>
+ <action>
+   <name>RemoveMessage</name> 
+   <argumentList>
+   <argument>
+     <name>MessageID</name> 
+     <direction>in</direction> 
+     <relatedStateVariable>A_ARG_TYPE_MessageID</relatedStateVariable> 
+     </argument>
+   </argumentList>
+ </action>
+ </actionList>
+ <serviceStateTable>
+ <stateVariable sendEvents="no">
+   <name>A_ARG_TYPE_MessageID</name> 
+   <dataType>string</dataType> 
+ </stateVariable>
+ <stateVariable sendEvents="no">
+   <name>A_ARG_TYPE_MessageType</name> 
+   <dataType>string</dataType> 
+   <defaultValue>text/xml; charset="utf-8"</defaultValue> 
+ </stateVariable>
+ <stateVariable sendEvents="no">
+   <name>A_ARG_TYPE_Message</name> 
+   <dataType>string</dataType> 
+ </stateVariable>
+ </serviceStateTable>
+ </scpd>
+According to the "downloaded" content, the MessageBoxService should implement two actions - AddMessage and RemoveMessage. However, RemoveMessage does not seem to be implemented in TV, so let's forget about it for now.
+
+** Structure of AddMessage **
+
+Structure of the AddMessage is partially clear from the description, and it should have following format:
+ <u:AddMessage xmlns:u=\"urn:samsung.com:service:MessageBoxService:1\">
+    <MessageType>Body of MessageType</MessageType>
+    <MessageID>Body of MessageID</MessageID>
+    <Message>Body of Message</Message>
+  </u:AddMessage>
+
+This XML structure is valid if:
+Body of MessageType contains text "text/xml".
+Body of MessageID does not seem to be checked, so it can contain anything. It must not be empty.
+Body of Message contains XML structure with message information.
+
+** Structure of Message **
+
+The most interesting thing is content of the Message body which specifies message sent to the TV.
+Content of the Message is in fact XML structure, but with replaced "<" -> "&lt;" and ">" -> "&gt;".
+For easier reading, in following XML structured I use "<" and ">" characters but before sending the request to the TV, don't forget to replace them by "&lt;" and "&gt;"!
+If you want to use German Umlauts and the euro-sign, you have to replace them too.
+   "ä"  ->  "Ã¤"     (character 0xC3, 0xA4)
+   "Ä"  ->  "Ã„"     (character 0xC3, 0x84)
+   "ö"  ->  "Ã¶"     (character 0xC3, 0xB6)
+   "Ö"  ->  "Ã–"     (character 0xC3, 0x96)
+   "ü"  ->  "Ã¼"     (character 0xC3, 0xBC)
+   "Ü"  ->  "Ãœ"     (character 0xC3, 0x9C)
+   "ß"  ->  "ÃŸ"     (character 0xC3, 0x9F)
+   "€"  ->  "â‚¬"    (character 0xE2, 0x82, 0xAC)
+
+Message XML structure is parsed as following:
+
+ <Category>Body</Category> 
+is checked to contain "SMS", "Incoming Call", "Schedule Reminder" and "MMS". However, "MMS" category is not implemented in TV.
+
+ <DisplayType>Body</DisplayType>
+is checked if contains "Maximum". If yes, detailed message is displayed on the TV, otherwise only short info is displayed.
+
+According to the Category type, different tags are used to retrieve content:
+
+** "SMS" Category **
+
+ <ReceiveTime>
+   <Date>YYYY-MM-DD</Date>		(YYYY - year, MM - month, DD - day)
+   <Time>HH:MM:SS</Time>		(HH - hour, MM - minute, SS - second)
+ </ReceiveTime>
+ <Receiver>
+   <Number>Receiver Phone Number</Number>
+   <Name>Receiver Name</Name>
+ </Receiver>
+ <Sender>
+   <Number>Sender Phone Number</Number>
+   <Name>Sender Name</Name>
+ </Sender>
+ <Body>SMS Body</Body>
+Sender and Body is displayed only in case DisplayType is set to "Maximum".
+
+** "Incoming Call" Category **
+
+ <CallTime>
+   <Date>YYYY-MM-DD</Date>		(YYYY - year, MM - month, DD - day)
+   <Time>HH:MM:SS</Time>		(HH - hour, MM - minute, SS - second)
+ </CallTime>
+ <Callee>
+   <Number>Callee Phone Number</Number>
+   <Name>Callee Name</Name>
+ </Callee>
+ <Caller>
+   <Number>Caller Phone Number</Number>
+   <Name>Caller Name</Name>
+ </Caller>
+Caller is displayed only in case DisplayType is set to "Maximum".
+
+** "Schedule Reminder" Category **
+
+ <StartTime>
+   <Date>YYYY-MM-DD</Date>		(YYYY - year, MM - month, DD - day)
+   <Time>HH:MM:SS</Time>		(HH - hour, MM - minute, SS - second)
+ </StartTime>
+ <Owner>
+   <Number>Owner Phone Number</Number>
+   <Name>Owner Name</Name>
+ </Owner>
+ <Subject>Schedule Reminder Subject</Subject>
+ <EndTime>
+   <Date>YYYY-MM-DD</Date>		(YYYY - year, MM - month, DD - day)
+   <Time>HH:MM:SS</Time>		(HH - hour, MM - minute, SS - second)
+ </EndTime>
+ <Location>Location Name</Location>
+ <Body>Schedule Reminder Body</Body>
+EndTime, Location and Body is displayed only in case DisplayType is set to "Maximum".
+Sample Request
+
+Sample SOAP request to display SMS message (without HTTP headers):
+ <?xml version="1.0" encoding="utf-8"?>
+  <s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" >
+    <s:Body>
+      <u:AddMessage xmlns:u="urn:samsung.com:service:MessageBoxService:1\">
+        <MessageType>text/xml</MessageType>
+        <MessageID>can be anything</MessageID>
+        <Message>
+          &lt;Category&gt;SMS&lt;/Category&gt;
+          &lt;DisplayType&gt;Maximum&lt;/DisplayType&gt;
+          &lt;ReceiveTime&gt;
+          &lt;Date&gt;2010-05-04&lt;/Date&gt;
+          &lt;Time&gt;01:02:03&lt;/Time&gt;
+          &lt;/ReceiveTime&gt;
+          &lt;Receiver&gt;
+          &lt;Number&gt;12345678&lt;/Number&gt;
+          &lt;Name&gt;Receiver&lt;/Name&gt;
+          &lt;/Receiver&gt;
+          &lt;Sender&gt;
+          &lt;Number&gt;11111&lt;/Number&gt;
+          &lt;Name&gt;Sender&lt;/Name&gt;
+          &lt;/Sender&gt;
+          &lt;Body&gt;Hello World!!!&lt;/Body&gt;
+        </Message>
+      </u:AddMessage>
+    </s:Body>
+  </s:Envelope>
+
