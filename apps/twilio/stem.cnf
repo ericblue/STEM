@@ -1,0 +1,7 @@
+# Put your own values here
+{
+	# IP of your Samsung TV
+	'tvip'			=>	'192.168.1.1',
+	# Phone number to forward call to after Twilio intercepts
+	'forward_phone'	=>	'310-555-1212'
+}

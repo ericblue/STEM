@@ -36,3 +36,7 @@ this feature.
     * SamyGo Wiki - original protocol documentation - http://wiki.samygo.tv/index.php5/MessageBoxService_request_format
     * Java App for sending messages - http://wiki.samygo.tv/index.php5/Desktop_applications_list#MessageBox_Service_C-series
 
+[Change Log]
+
+- 04/07/12 - Initial release
+- 04/09/12 - Added Twilio SMS and call notifiation CGI scripts (Perl)    
